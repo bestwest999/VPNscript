@@ -1,0 +1,14 @@
+{'transform_set': 'esp-3des esp-sha-hmac',
+ 'crypto_map': 'ADSTREAM',
+ 'ASA_ip': '10.44.202.2',
+ 'INTsubnets': {
+      'subnet': '10.209.1.0 255.255.255.0',
+      'subnet2': '10.209.2.0 255.255.255.0'
+                },
+  'EXTsubnets': {
+     'subnet': '10.44.202.0 255.255.255.0',
+     'subnet2': '10.44.203.0 255.255.255.0'
+               }
+
+}
+
