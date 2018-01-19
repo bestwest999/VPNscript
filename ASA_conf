@@ -40,3 +40,4 @@ crypto map NEW 112 match address TONORDIC
 crypto map NEW 112 set peer 94.127.52.90
 crypto map NEW 112 set ikev1 transform-set Toadstre-ipsgxn
 crypto map NEW 113 match address TOESPOFFICE
+crypto map NEW interface SOHONETSMN
