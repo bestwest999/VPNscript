@@ -2,7 +2,7 @@
  'ASA_ip': '192.168.133.253',
  'REMOTE_peer': {
     'peer': '10.10.10.10',
-    'peer2': '20.20.20.20',   # you can add moree peer here
+    #'peer2': '20.20.20.20',   # you can add moree peer here
                 },
  'transform_set_name': 'transform-amzn',
  'PFS': 'yes',  # put option 'yes' or 'no'

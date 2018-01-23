@@ -1,4 +1,9 @@
-crypto map ADSTREAM 113 set peer 10.10.10.10 20.20.20.20 
+tunnel-group 10.10.10.10 type ipsec-l2l
+tunnel-group 10.10.10.10 ipsec-attributes
+ikev1 pre-shared-key test
+isakmp keepalive threshold 10 retry 3
+exit
+crypto map ADSTREAM 113 set peer 10.10.10.10
 crypto map ADSTREAM 113 match address TOwonder
 crypto map ADSTREAM 113 set ikev1 transform-set transform-amzn
 access-list TOBH line 1 extended permit ip 10.209.3.0 255.255.255.0 10.44.202.0 255.255.255.0 
