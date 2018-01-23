@@ -6,7 +6,8 @@ exit
 crypto map ADSTREAM 113 set peer 10.10.10.10
 crypto map ADSTREAM 113 match address TOwonder
 crypto map ADSTREAM 113 set ikev1 transform-set transform-amzn
-access-list TOBH line 1 extended permit ip 10.209.3.0 255.255.255.0 10.44.202.0 255.255.255.0 
-access-list TOBH line 1 extended permit ip 10.209.3.0 255.255.255.0 10.44.203.0 255.255.255.0 
-access-list TOBH line 1 extended permit ip 10.209.2.0 255.255.255.0 10.44.202.0 255.255.255.0 
-access-list TOBH line 1 extended permit ip 10.209.2.0 255.255.255.0 10.44.203.0 255.255.255.0 
+crypto map ADSTREAM 113 set pfs
+access-list TOwonder line 1 extended permit ip 10.209.3.0 255.255.255.0 10.44.202.0 255.255.255.0 
+access-list TOwonder line 1 extended permit ip 10.209.3.0 255.255.255.0 10.44.203.0 255.255.255.0 
+access-list TOwonder line 1 extended permit ip 10.209.2.0 255.255.255.0 10.44.202.0 255.255.255.0 
+access-list TOwonder line 1 extended permit ip 10.209.2.0 255.255.255.0 10.44.203.0 255.255.255.0 

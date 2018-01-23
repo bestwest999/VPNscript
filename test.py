@@ -32,6 +32,7 @@ with open('wonder_vpn_conf', 'r') as config_file:
             ACL_name = config.setdefault('ACL_name', None)
             Transform_name = config.setdefault('transform_set_name', None)
             key = config.setdefault('KEY', None)
+            pfs = config.setdefault('PFS', None)
 
             # Route map and tunnel configuration
             REMOTE_peer = dict(config.setdefault('REMOTE_peer', None))
@@ -53,6 +54,11 @@ with open('wonder_vpn_conf', 'r') as config_file:
             output.writelines(routemap2)
             output.writelines(routemap3)
 
+            # PFS conf
+            if (pfs == 'yes'):
+                pfs = 'crypto map ADSTREAM {} set pfs\n'.format(map)
+                output.writelines(pfs)
+
             # access-list configuration
             INTsubnets = dict(config.setdefault('INTsubnets', None))
             EXTsubnets = dict(config.setdefault('EXTsubnets', None))
@@ -60,7 +66,7 @@ with open('wonder_vpn_conf', 'r') as config_file:
             print(asa)
             for i in INTsubnets.values():
                 for e in EXTsubnets.values():
-                    data = 'access-list TOBH line 1 extended permit ip {} {} \n'.format(i, e)
+                    data = 'access-list {} line 1 extended permit ip {} {} \n'.format(ACL_name, i, e)
                     output.write(data)
 
         finally:
