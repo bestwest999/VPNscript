@@ -15,12 +15,13 @@ def tunnel(key, peer):         # function for generating tunnel-group conf
     output.writelines(tunnel3)
     output.writelines('isakmp keepalive threshold 10 retry 3\nexit\n')
 
+# currect asa conf checking for free crypto map number
 with open('ASA_conf', 'r') as ASA:
     for line in ASA:
         if re.match('crypto map NEW [1-9]', line):
             line = line.split()
             map.append(line[3])
-    map = (max(map))
+    map = int(max(map)) + 1
 
 with open('wonder_vpn_conf', 'r') as config_file:
         config = dict(eval(config_file.read()))
@@ -33,6 +34,7 @@ with open('wonder_vpn_conf', 'r') as config_file:
             Transform_name = config.setdefault('transform_set_name', None)
             key = config.setdefault('KEY', None)
             pfs = config.setdefault('PFS', None)
+            no_natOBJ = config.setdefault('NOVPN_NETWOR_OBJECT', None)
 
             # Route map and tunnel configuration
             REMOTE_peer = dict(config.setdefault('REMOTE_peer', None))
@@ -68,6 +70,16 @@ with open('wonder_vpn_conf', 'r') as config_file:
                 for e in EXTsubnets.values():
                     data = 'access-list {} line 1 extended permit ip {} {} \n'.format(ACL_name, i, e)
                     output.write(data)
+            # NAT configuration
+            nat_obj1 = 'object-group network {}\n'.format(no_natOBJ)
+            output.writelines(nat_obj1)
+            for e in EXTsubnets.values():
+                nat_obj = 'network-object {}\n'.format(e)
+                output.writelines(nat_obj)
+            output.writelines('object-group network VPN_NONAT\n')
+            nat_obj2 = 'group-object {}'.format(no_natOBJ)
+            output.writelines(nat_obj2)
+
 
         finally:
             output.close()
