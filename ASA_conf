@@ -1,4 +1,4 @@
-snmp-server location 2nd Floor, Telecity
+dsnmp-server location 2nd Floor, Telecity
 no snmp-server contact
 snmp-server community adstreamsnmp
 snmp-server enable traps interface-threshold
@@ -39,5 +39,16 @@ crypto map NEW 111 set security-association lifetime seconds 28800
 crypto map NEW 112 match address TONORDIC
 crypto map NEW 112 set peer 94.127.52.90
 crypto map NEW 112 set ikev1 transform-set Toadstre-ipsgxn
-crypto map NEW 113 match address TOESPOFFICE
+crypto map NEW 117 match address TOESPOFFICE
 crypto map NEW interface SOHONETSMN
+
+object-group network VPN_NONAT
+ group-object Berkshire_office
+ group-object TELECITY
+ group-object amazn_SINGAPOOR
+ group-object amazn_IRE_PROD
+object-group network Berkshire_office
+ network-object 192.168.133.0 255.255.255.0
+ network-object 192.168.132.0 255.255.255.0
+ network-object 192.168.112.0 255.255.255.0
+ network-object 10.44.112.0 255.255.255.0
