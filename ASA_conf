@@ -1,37 +1,23 @@
-dsnmp-server location 2nd Floor, Telecity
-no snmp-server contact
-snmp-server community adstreamsnmp
-snmp-server enable traps interface-threshold
-sla monitor 11
- type echo protocol ipIcmpEcho 10.81.0.1 interface SOHONETSMN
- frequency 5
-sla monitor schedule 11 life forever start-time now
-sla monitor 12
- type echo protocol ipIcmpEcho 10.81.8.1 interface SOHONETSMN
- frequency 5
-sla monitor schedule 12 life forever start-time now
-crypto ipsec ikev1 transform-set test123 esp-aes-256 esp-md5-hmac
-crypto ipsec ikev1 transform-set test esp-aes esp-sha-hmac
-crypto ipsec ikev1 transform-set test1 esp-aes-192 esp-sha-hmac
+NO1P-FW1-COR01# show run
+LNO1P-FW1-COR01# show running-config cr
+LNO1P-FW1-COR01# show running-config crypto
+crypto ipsec ikev1 transform-set MD5 esp-des esp-md5-hmac
 crypto ipsec ikev1 transform-set ESP-AES-256 esp-aes-256 esp-sha-hmac
 crypto ipsec ikev1 transform-set ESP-3DES-MD5 esp-3des esp-md5-hmac
 crypto ipsec ikev1 transform-set bbdo esp-aes-256 esp-sha-hmac
 crypto ipsec ikev1 transform-set RemoteAccessMD5 esp-3des esp-md5-hmac
 crypto ipsec ikev1 transform-set LonToSyd esp-aes esp-sha-hmac
-crypto ipsec ikev1 transform-set Chello esp-des esp-sha-hmac
-crypto ipsec ikev1 transform-set MD5 esp-3des esp-sha-hmac
 crypto ipsec ikev1 transform-set Toadstre-ipsgxn esp-3des esp-sha-hmac
-crypto ipsec ikev1 transform-set CHINA esp-aes-192 esp-sha-hmac
+crypto ipsec ikev1 transform-set test esp-aes esp-sha-hmac
+crypto ipsec ikev1 transform-set test1 esp-aes-192 esp-sha-hmac
 crypto ipsec ikev1 transform-set transform-amzn esp-aes esp-sha-hmac
+crypto ipsec ikev1 transform-set TRANS_ESP_3DES_SHA esp-3des esp-sha-hmac
+crypto ipsec ikev1 transform-set TRANS_ESP_3DES_SHA mode transport
+crypto ipsec ikev1 transform-set DUBSAT esp-des esp-sha-hmac
 crypto ipsec security-association pmtu-aging infinite
-crypto dynamic-map REMOTEACCESS 10 set ikev1 transform-set RemoteAccessMD5
-crypto dynamic-map REMOTEACCESS 10 set reverse-route
-crypto map NEW 105 match address TOANTGR
-crypto map NEW 105 set peer 79.129.43.107
-crypto map NEW 105 set ikev1 transform-set Toadstre-ipsgxn
-crypto map NEW 109 match address TOSUSF
-crypto map NEW 109 set peer 195.141.230.146
-crypto map NEW 109 set ikev1 transform-set Toadstre-ipsgxn
+crypto dynamic-map REMOTEACCESS 10 set ikev1 transform-set TRANS_ESP_3DES_SHA
+crypto map ADSTREAM 1000 ipsec-isakmp dynamic REMOTEACCESS
+crypto map ADSTREAM 1512 set ikev1 transform-set LonToSyd
 crypto map NEW 111 match address TODEOFFICE
 crypto map NEW 111 set peer 213.61.245.134
 crypto map NEW 111 set ikev1 transform-set Toadstre-ipsgxn
@@ -39,16 +25,276 @@ crypto map NEW 111 set security-association lifetime seconds 28800
 crypto map NEW 112 match address TONORDIC
 crypto map NEW 112 set peer 94.127.52.90
 crypto map NEW 112 set ikev1 transform-set Toadstre-ipsgxn
-crypto map NEW 117 match address TOESPOFFICE
+crypto map NEW 113 match address TOESPOFFICE
+crypto map NEW 113 set peer 62.97.107.132
+crypto map NEW 113 set ikev1 transform-set Toadstre-ipsgxn
+crypto map NEW 122 match address toGREECE
+crypto map NEW 122 set peer 195.46.6.234
+crypto map NEW 122 set ikev1 transform-set Toadstre-ipsgxn
+crypto map NEW 128 match address TOITALYOFFICE
+crypto map NEW 128 set peer 217.111.205.50 82.112.204.226
+crypto map NEW 128 set ikev1 transform-set Toadstre-ipsgxn
+crypto map NEW 138 match address KIEVOFFICE2
+crypto map NEW 138 set pfs
+crypto map NEW 138 set peer 213.186.194.90 217.20.174.226
+crypto map NEW 138 set ikev1 transform-set Toadstre-ipsgxn
+crypto map NEW 138 set security-association lifetime seconds 28800
+crypto map NEW 138 set nat-t-disable
+crypto map NEW 155 match address TOSAOFFICE
+crypto map NEW 155 set peer 41.79.222.55
+crypto map NEW 155 set ikev1 transform-set Toadstre-ipsgxn
+crypto map NEW 165 match address TOFRANCE
+crypto map NEW 165 set peer 89.16.242.242
+crypto map NEW 165 set ikev1 transform-set Toadstre-ipsgxn
+crypto map NEW 168 match address TOBRAZILOFFICE
+crypto map NEW 168 set peer 177.47.16.162 201.23.103.82
+crypto map NEW 168 set ikev1 transform-set Toadstre-ipsgxn
+crypto map NEW 169 match address TOAUOFFICECISCO
+crypto map NEW 169 set peer 203.58.60.118
+crypto map NEW 169 set ikev1 transform-set LonToSyd
+crypto map NEW 170 set pfs
+crypto map NEW 170 set ikev1 transform-set transform-amzn
+crypto map NEW 171 match address acl-amzn-virginia
+crypto map NEW 171 set pfs
+crypto map NEW 171 set peer 54.240.217.166 54.240.217.164
+crypto map NEW 171 set ikev1 transform-set transform-amzn
+crypto map NEW 172 match address acl-amzn-brazil
+crypto map NEW 172 set pfs
+crypto map NEW 172 set peer 177.72.241.58 177.72.241.59
+crypto map NEW 172 set ikev1 transform-set transform-amzn
+crypto map NEW 173 match address TOMALAYSIA_ASA
+crypto map NEW 173 set peer 202.168.75.78
+crypto map NEW 173 set ikev1 transform-set Toadstre-ipsgxn
+crypto map NEW 173 set nat-t-disable
+crypto map NEW 190 match address TOADSTREAMUAE
+crypto map NEW 190 set peer 94.205.152.78
+crypto map NEW 190 set ikev1 transform-set ESP-AES-256
+crypto map NEW 190 set security-association lifetime seconds 28800
+crypto map NEW 191 match address acl-amzn
+crypto map NEW 191 set pfs
+crypto map NEW 191 set peer 87.238.85.44 176.32.107.149
+crypto map NEW 191 set ikev1 transform-set transform-amzn
+crypto map NEW 192 match address acl-amzn-sydney
+crypto map NEW 192 set pfs
+crypto map NEW 192 set peer 13.54.238.152 13.55.225.71
+crypto map NEW 192 set ikev1 transform-set transform-amzn
+crypto map NEW 192 set security-association lifetime seconds 3600
+crypto map NEW 193 match address acl-amzn-calif
+crypto map NEW 193 set pfs
+crypto map NEW 193 set peer 204.246.160.78 204.246.163.62
+crypto map NEW 193 set ikev1 transform-set transform-amzn
+crypto map NEW 194 match address acl-amzn-singapoor
+crypto map NEW 194 set pfs
+crypto map NEW 194 set peer 203.83.222.237 203.83.222.236
+crypto map NEW 194 set ikev1 transform-set transform-amzn
+crypto map NEW 195 match address TOMIAMIOFFICE
+crypto map NEW 195 set peer 204.88.28.146 205.175.211.90
+crypto map NEW 195 set ikev1 transform-set Toadstre-ipsgxn
+crypto map NEW 196 match address MALAYSIA
+crypto map NEW 196 set ikev1 transform-set Toadstre-ipsgxn
+crypto map NEW 196 set security-association lifetime seconds 3600
+crypto map NEW 197 match address TOSYDNEYOFFICE
+crypto map NEW 197 set peer 203.83.195.202
+crypto map NEW 197 set ikev1 transform-set Toadstre-ipsgxn
+crypto map NEW 198 match address TOBurbank
+crypto map NEW 198 set peer 205.175.210.194
+crypto map NEW 198 set ikev1 transform-set Toadstre-ipsgxn
+crypto map NEW 200 match address TODUBSAT_CHELTENHAM
+crypto map NEW 200 set peer 115.186.195.2
+crypto map NEW 200 set ikev1 transform-set DUBSAT
+crypto map NEW 201 match address TODUBSAT_AWS_US_EAST
+crypto map NEW 201 set peer 52.0.9.106
+crypto map NEW 201 set ikev1 transform-set transform-amzn
+crypto map NEW 201 set security-association lifetime seconds 3600
+crypto map NEW 202 match address TONEWYORK
+crypto map NEW 202 set peer 208.65.211.54 208.65.211.50
+crypto map NEW 202 set ikev1 transform-set Toadstre-ipsgxn
+crypto map NEW 203 match address TOMUMBAIOFFICE
+crypto map NEW 203 set peer 203.115.125.2
+crypto map NEW 203 set ikev1 transform-set Toadstre-ipsgxn
+crypto map NEW 204 match address TOMELBOURNEOFFICE_NEW
+crypto map NEW 204 set peer 203.83.200.122
+crypto map NEW 204 set ikev1 transform-set Toadstre-ipsgxn
+crypto map NEW 205 match address TODUBSAT_AWS_SYD_PRE-PROD
+crypto map NEW 205 set pfs
+crypto map NEW 205 set peer 52.65.83.160 52.65.138.156
+crypto map NEW 205 set ikev1 transform-set transform-amzn
+crypto map NEW 205 set security-association lifetime seconds 3600
+crypto map NEW 206 match address TODUBSAT_AWS_SYD_PROD
+crypto map NEW 206 set pfs
+crypto map NEW 206 set peer 52.63.63.118 52.63.165.28
+crypto map NEW 206 set ikev1 transform-set transform-amzn
+crypto map NEW 206 set security-association lifetime seconds 3600
+crypto map NEW 207 match address platform-amzn
+crypto map NEW 207 set pfs
+crypto map NEW 207 set peer 34.251.177.95 34.253.170.177
+crypto map NEW 207 set ikev1 transform-set transform-amzn
+crypto map NEW 207 set security-association lifetime seconds 3600
+crypto map NEW 208 match address TOHUNGARYOFFICE
+crypto map NEW 208 set peer 92.61.116.162
+crypto map NEW 208 set ikev1 transform-set Toadstre-ipsgxn
 crypto map NEW interface SOHONETSMN
-
-object-group network VPN_NONAT
- group-object Berkshire_office
- group-object TELECITY
- group-object amazn_SINGAPOOR
- group-object amazn_IRE_PROD
-object-group network Berkshire_office
- network-object 192.168.133.0 255.255.255.0
- network-object 192.168.132.0 255.255.255.0
- network-object 192.168.112.0 255.255.255.0
- network-object 10.44.112.0 255.255.255.0
+crypto ca trustpoint Adstream
+ crl configure
+crypto ca trustpoint AdstreamUK1
+ crl configure
+crypto ca trustpoint ASDM_TrustPoint2
+ crl configure
+crypto ca trustpoint ASDM_TrustPoint4
+ enrollment terminal
+ crl configure
+crypto ca trustpoint ASDM_TrustPoint0
+ enrollment terminal
+ crl configure
+crypto ca trustpoint ASDM_TrustPoint1
+ crl configure
+crypto ca trustpoint ASDM_TrustPoint3
+ crl configure
+crypto ca trustpoint ASDM_TrustPoint5
+ crl configure
+crypto ca trustpoint ASDM_TrustPoint6
+ crl configure
+crypto ca trustpoint ASDM_TrustPoint7
+ keypair ASDM_TrustPoint1
+ crl configure
+crypto ca trustpoint ASDM_TrustPoint8
+ crl configure
+crypto ca trustpoint ASDM_TrustPoint9
+ crl configure
+crypto ca trustpoint ASDM_TrustPoint10
+ crl configure
+crypto ca trustpoint ASDM_TrustPoint11
+ crl configure
+crypto ca trustpool policy
+crypto ca certificate chain ASDM_TrustPoint0
+ certificate ca 0140bc51d11d10f9d32037c20368b612
+    3082061a 30820502 a0030201 02021001 40bc51d1 1d10f9d3 2037c203 68b61230
+    0d06092a 864886f7 0d01010b 05003081 96310b30 09060355 04061302 4742311b
+    30190603 55040813 12477265 61746572 204d616e 63686573 74657231 10300e06
+    03550407 13075361 6c666f72 64311a30 18060355 040a1311 434f4d4f 444f2043
+    41204c69 6d697465 64313c30 3a060355 04031333 434f4d4f 444f2052 5341204f
+    7267616e 697a6174 696f6e20 56616c69 64617469 6f6e2053 65637572 65205365
+    72766572 20434130 1e170d31 35303433 30303030 3030305a 170d3138 30373330
+    32333539 35395a30 82010f31 0b300906 03550406 13024742 3111300f 06035504
+    11130857 43315620 37414131 0f300d06 03550408 13064c6f 6e646f6e 310f300d
+    06035504 0713064c 6f6e646f 6e311d30 1b060355 04091314 3136382d 31373320
+    48696768 20486f6c 626f726e 31223020 06035504 09131937 74682046 6c6f6f72
+    20426572 6b736869 72652048 6f757365 311c301a 06035504 0a131341 64737472
+    65616d20 554b204c 696d6974 6564310b 30090603 55040b13 02495431 26302406
+    0355040b 131d486f 73746564 20627920 41647374 7265616d 20554b20 4c696d69
+    74656431 1c301a06 0355040b 13135072 656d6975 6d53534c 2057696c 64636172
+    64311730 15060355 0403140e 2a2e6164 73747265 616d2e63 6f6d3082 0122300d
+    06092a86 4886f70d 01010105 00038201 0f003082 010a0282 010100cb c281e93d
+    2369a0fb 94d25356 3c5d482e 0b3ddc68 c64d5009 d424cfb3 dfce916c 32d97b50
+    0a39124b 8f44a6ff 8b1741ce ddea273a b54b8e22 82410de3 04558936 103ad61f
+    ffda4219 7ee61b9c f21c5103 9a3ae417 a974bb1e fea32c4f a0cef9f0 97f1add5
+    7668dade a2101f02 870bd206 310dcf71 caf1a5c6 7365b833 4ea3d42c e583f77d
+    1b26e18a 50731902 0c812270 3fbcae45 1ac86b75 c47c5fce 7cb0b1bb c4de5477
+    e28321a8 facfb689 be7d6ca9 d4ba92e0 8885ee8b dff35021 3910a4ad 8511a2cd
+    040323d6 1573dbda 5d62bdb9 f3b479ac b4d1a38f 731ebbb5 e33fa981 c021bbed
+    45298f7c 8ceb0962 6d2d0dd9 ab2998b1 09485791 a6ac8d19 8dbf8302 03010001
+    a38201e6 308201e2 301f0603 551d2304 18301680 149af32b dacfad4f b62fbb2a
+    48482a12 b71b42c1 24301d06 03551d0e 04160414 efdb531f 1f627c41 31789cff
+    cf0a4efa 9cefc5c1 300e0603 551d0f01 01ff0404 030205a0 300c0603 551d1301
+    01ff0402 3000301d 0603551d 25041630 1406082b 06010505 07030106 082b0601
+    05050703 02305006 03551d20 04493047 303b060c 2b060104 01b23101 02010304
+    302b3029 06082b06 01050507 0201161d 68747470 733a2f2f 73656375 72652e63
+    6f6d6f64 6f2e636f 6d2f4350 53300806 0667810c 01020230 5a060355 1d1f0453
+    3051304f a04da04b 86496874 74703a2f 2f63726c 2e636f6d 6f646f63 612e636f
+    6d2f434f 4d4f444f 5253414f 7267616e 697a6174 696f6e56 616c6964 6174696f
+    6e536563 75726553 65727665 7243412e 63726c30 818b0608 2b060105 05070101
+    047f307d 30550608 2b060105 05073002 86496874 74703a2f 2f637274 2e636f6d
+    6f646f63 612e636f 6d2f434f 4d4f444f 5253414f 7267616e 697a6174 696f6e56
+    616c6964 6174696f 6e536563 75726553 65727665 7243412e 63727430 2406082b
+    06010505 07300186 18687474 703a2f2f 6f637370 2e636f6d 6f646f63 612e636f
+    6d302706 03551d11 0420301e 820e2a2e 61647374 7265616d 2e636f6d 820c6164
+    73747265 616d2e63 6f6d300d 06092a86 4886f70d 01010b05 00038201 01000c0b
+    7ed3717b d2c6756f e75e9855 ba6f26e5 17170cc3 771c7f8d 734b1d64 25c2e458
+    33c91edc 37da2688 032eb7f4 546ff7bc 012aa773 e2ce1fbd 4bd32a51 f7aa156a
+    af64620a b9c2f882 7d1142ed 4e91135d eedbd535 ab0ea7a1 102ac848 404632ef
+    01ad62b9 e4b2d6e0 ca0518ce 17b322ef 02a633e9 a4d8e8b2 40d20dc9 f0d67e0b
+    6bc56c03 e3771447 e109aab7 6e36a1df ee049780 72a9a3df b273b190 74788f84
+    bdf1fbb4 bf433660 1e2f3834 a060ced5 b166b0ca 8dd82b26 e749eb28 73d7520b
+    5a46dc31 a0770f47 900d43ac 216cebd4 a89fc356 37e66423 133b8abd c255d7f6
+    425ea9d4 b477e9b2 d4ab85cd 6f507158 e1d15c80 2b144c60 25b8f8a8 2064
+  quit
+crypto isakmp identity address
+crypto isakmp disconnect-notify
+crypto ikev1 enable SOHONETSMN
+crypto ikev1 am-disable
+crypto ikev1 policy 10
+ authentication pre-share
+ encryption aes
+ hash sha
+ group 1
+ lifetime 86400
+crypto ikev1 policy 15
+ authentication pre-share
+ encryption 3des
+ hash md5
+ group 2
+ lifetime 86400
+crypto ikev1 policy 20
+ authentication pre-share
+ encryption 3des
+ hash sha
+ group 1
+ lifetime 86400
+crypto ikev1 policy 25
+ authentication pre-share
+ encryption 3des
+ hash sha
+ group 2
+ lifetime 86400
+crypto ikev1 policy 35
+ authentication pre-share
+ encryption 3des
+ hash sha
+ group 2
+ lifetime 3600
+crypto ikev1 policy 40
+ authentication pre-share
+ encryption aes-256
+ hash sha
+ group 1
+ lifetime 86400
+crypto ikev1 policy 50
+ authentication pre-share
+ encryption des
+ hash sha
+ group 2
+ lifetime 86400
+crypto ikev1 policy 60
+ authentication pre-share
+ encryption aes-256
+ hash sha
+ group 2
+ lifetime 86400
+crypto ikev1 policy 80
+ authentication pre-share
+ encryption aes
+ hash md5
+ group 2
+ lifetime 86400
+crypto ikev1 policy 90
+ authentication pre-share
+ encryption aes-256
+ hash md5
+ group 2
+ lifetime 86400
+crypto ikev1 policy 100
+ authentication pre-share
+ encryption aes
+ hash sha
+ group 5
+ lifetime 86400
+crypto ikev1 policy 110
+ authentication pre-share
+ encryption aes
+ hash sha
+ group 2
+ lifetime 86400
+crypto ikev1 policy 115
+ authentication pre-share
+ encryption 3des
+ hash md5
