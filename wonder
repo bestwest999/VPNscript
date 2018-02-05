@@ -15,7 +15,7 @@ with open('wonder_vpn_conf', 'r') as config_file:
         client = paramiko.SSHClient()
         client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
         asa = config.setdefault('ASA_ip', None)
-        client.connect(hostname= asa, port=22, username='root', password='******', timeout=25)
+        client.connect(hostname= asa, port=22, username='root', password='cSc&ML&J', timeout=25)
         time.sleep(2)
         tty = client.invoke_shell()
         print(tty)
@@ -43,7 +43,7 @@ with open('wonder_vpn_conf', 'r') as config_file:
             output.writelines('isakmp keepalive threshold 10 retry 3\nexit\n')
         
 # currect asa conf checking for free crypto map number
-        with open('/tftpboot/network-devices/ASA_conf', 'r') as ASA:
+        with open('ASA_conf', 'r') as ASA:
             for line in ASA:
                 if re.match('crypto map NEW [1-9]', line):
                     line = line.split()
