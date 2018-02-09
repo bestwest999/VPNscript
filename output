@@ -3,16 +3,16 @@ tunnel-group 10.10.10.25 ipsec-attributes
 ikev1 pre-shared-key karoly
 isakmp keepalive threshold 10 retry 3
 exit
-crypto map ADSTREAM 118 set peer 10.10.10.25
-crypto map ADSTREAM 118 match address TOwonder
-crypto map ADSTREAM 118 set ikev1 transform-set transform-amzn
-crypto map ADSTREAM 118 set pfs
+crypto map NEW 209 set peer 10.10.10.25
+crypto map NEW 209 match address TOwonder
+crypto map NEW 209 set ikev1 transform-set transform-amzn
+crypto map NEW 209 set pfs
 access-list TOwonder line 1 extended permit ip 10.44.202.0 255.255.255.0 10.44.192.0 255.255.255.0 
 access-list TOwonder line 1 extended permit ip 10.44.202.0 255.255.255.0 10.44.193.0 255.255.255.0 
 access-list TOwonder line 1 extended permit ip 10.44.203.0 255.255.255.0 10.44.192.0 255.255.255.0 
 access-list TOwonder line 1 extended permit ip 10.44.203.0 255.255.255.0 10.44.193.0 255.255.255.0 
-object-group network toGoodlife
+object-group network None
 network-object 10.44.192.0 255.255.255.0
 network-object 10.44.193.0 255.255.255.0
 object-group network VPN_NONAT
-group-object toGoodlife
+group-object None

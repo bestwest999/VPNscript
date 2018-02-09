@@ -7,15 +7,18 @@ import re
 import datetime
 config = [] # LIST where we will put config file data
 map = [] # route-map number
+CryptoMap = ''
 with open('wonder_vpn_conf', 'r') as config_file:
         config = dict(eval(config_file.read()))
 
         paramiko.util.log_to_file("wonder.log");
-        f = open('ASA_conf','w');
+       # f = open('/tftpboot/network-devices/ASA_conf','w');
         client = paramiko.SSHClient()
         client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
         asa = config.setdefault('ASA_ip', None)
-        client.connect(hostname= asa, port=22, username='root', password='cSc&ML&J', timeout=25)
+        user = input("username: ")
+        passw = input("password: ")
+        client.connect(hostname= asa, port=22, username=user, password=passw, timeout=25)
         time.sleep(2)
         tty = client.invoke_shell()
         print(tty)
@@ -42,10 +45,14 @@ with open('wonder_vpn_conf', 'r') as config_file:
             output.writelines(tunnel3)
             output.writelines('isakmp keepalive threshold 10 retry 3\nexit\n')
         
-# currect asa conf checking for free crypto map number
+# currect asa conf checking for free crypto map number and Crypto map name
+
         with open('ASA_conf', 'r') as ASA:
             for line in ASA:
-                if re.match('crypto map NEW [1-9]', line):
+                if re.match('crypto map .* interface', line):
+                    lines= line.split()
+                    CryptoMap = lines[2]
+                if re.match('crypto map .* [1-9]', line):
                     line = line.split()
                     map.append(line[3])
             map = int(max(map)) + 1
@@ -53,25 +60,27 @@ with open('wonder_vpn_conf', 'r') as config_file:
         try:
             output = open('output', 'w')
                # main variables
-            CryptoMap = config.setdefault('crypto_map', None)
+           # CryptoMap = config.setdefault('crypto_map', None)
             ACL_name = config.setdefault('ACL_name', None)
             Transform_name = config.setdefault('transform_set_name', None)
-            key = config.setdefault('KEY', None)
             pfs = config.setdefault('PFS', None)
             no_natOBJ = config.setdefault('NONAT_NETWOR_OBJECT', None)
 
             # Route map and tunnel configuration
+            key = dict(config.setdefault('KEY', None))
             REMOTE_peer = dict(config.setdefault('REMOTE_peer', None))
             if (len(REMOTE_peer)>1):
                 peers = []
-                for i in REMOTE_peer.values():
-                    tunnel(key, i)
-                    peers.append(i) # remote peers list
+                for i, k in zip(REMOTE_peer.values(), key.values()):
+                #for k in key.values():
+                        tunnel(k, i)
+                        peers.append(i) # remote peers list
                 routemap1 = 'crypto map {} {} set peer {} {} \n'.format(CryptoMap, map, peers[0], peers[1])
                 output.writelines(routemap1)
             else:
                 peer = REMOTE_peer.setdefault('peer', None)
-                tunnel(key, peer)
+                for k in  key.values():
+                    tunnel(k, peer)
                 routemap1 = 'crypto map {} {} set peer {}\n'.format(CryptoMap, map, peer)
                 output.writelines(routemap1)
 
@@ -82,7 +91,7 @@ with open('wonder_vpn_conf', 'r') as config_file:
 
             # PFS conf
             if (pfs == 'yes'):
-                pfs = 'crypto map ADSTREAM {} set pfs\n'.format(map)
+                pfs = 'crypto map {} {} set pfs\n'.format(CryptoMap, map)
                 output.writelines(pfs)
 
             # access-list configuration
@@ -113,7 +122,7 @@ with open('wonder_vpn_conf', 'r') as config_file:
         choise = input ('If you want write this conf on the FW please type "yes", if no then type "no"\n')
         if choise == 'yes':
             print('writing to the fw\n')
-            with open('output',r) as output:
+            with open('output', 'r') as output:
                 for line in output:
                     tty.send(line)
                     time.sleep(60)

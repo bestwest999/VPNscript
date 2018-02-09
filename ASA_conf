@@ -163,4 +163,5 @@ crypto ca trustpoint ASDM_TrustPoint10
 crypto ca trustpoint ASDM_TrustPoint11
  crl configure
 crypto ca trustpool policy
-crypto ca certificate chain ASDM_TrustPoint0
+crypto ca certificate chain ASDM_TrustPoint
+

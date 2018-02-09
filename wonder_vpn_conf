@@ -1,12 +1,14 @@
-{'crypto_map': 'ADSTREAM',
- 'ASA_ip': '192.168.133.253',
+{'ASA_ip': '192.168.133.253',
  'REMOTE_peer': {
     'peer': '10.10.10.25',
     #'peer2': '20.20.20.30',   # you can add moree peer here
                 },
  'transform_set_name': 'transform-amzn',
  'PFS': 'yes',  # put option 'yes' or 'no'
- 'KEY': 'karoly',
+ 'KEY': {
+     'key1': 'karoly',
+    # 'key2': 'karoly2',
+         },
  'ACL_name': 'TOwonder',
  'NOVPN_NETWOR_OBJECT': 'toGoodlife',
  'INTsubnets': {
